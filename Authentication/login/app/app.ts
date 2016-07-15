@@ -3,7 +3,7 @@ import {Platform, ionicBootstrap} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
 import {HomePage} from './pages/home/home';
 import {LoginPage} from './pages/login/login';
-import {  AuthService } from './services/authentication';
+
 import { HTTP_PROVIDERS } from '@angular/http';
 
 @Component({
@@ -32,4 +32,4 @@ export class MyApp {
   }   
 }
 
-ionicBootstrap(MyApp, [HTTP_PROVIDERS], [AuthService]);
+ionicBootstrap(MyApp, [HTTP_PROVIDERS]);

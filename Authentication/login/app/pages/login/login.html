@@ -13,7 +13,7 @@
     <div *ngIf="username.hasError('required') && username.touched" 
         class="error-box">* Username is required!</div>
     <div *ngIf="username.hasError('minlength') && username.touched" 
-        class="error-box">* Minimum username length is 8!</div>            
+        class="error-box">* Minimum username length is 3!</div>            
     <div *ngIf="username.hasError('checkFirstCharacterValidator') && username.touched" 
         class="error-box">* Username cant't start with number!</div>                       
     <ion-item floating-label [class.error]="!password.valid && password.touched">
@@ -23,7 +23,7 @@
     <div *ngIf="password.hasError('required') && password.touched" 
         class="error-box">* Password is required</div>    
     <div *ngIf="password.hasError('minlength') && password.touched" 
-        class="error-box">* Minimum password length is 8!</div>                     
+        class="error-box">* Minimum password length is 3!</div>                     
     <div *ngIf="password.hasError('checkFirstCharacterValidator') && password.touched" 
         class="error-box">* Password cant't start with number!</div>             
     <br/><br/> 

@@ -1,8 +1,9 @@
 import { Page, NavController } from 'ionic-angular';
 import { HomePage } from '../home/home';
-import { User } from '../../user/user';
 import { FormBuilder,  ControlGroup, Validators, AbstractControl } from '@angular/common';
 import {Http, Headers} from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 @Page({
     templateUrl: 'build/pages/login/login.html',
@@ -14,7 +15,6 @@ export class LoginPage {
     username: AbstractControl;
     password: AbstractControl;
     fb: FormBuilder;
-    isAuthenticated: boolean = false;
 
     constructor(fb: FormBuilder, private nav: NavController, private http: Http) {
             this.fb = fb;
@@ -33,42 +33,33 @@ export class LoginPage {
     onSubmit(value): void { 
 
         if(this.authForm.valid) {
-            
-            
-            
-            let checknow = this.authenticatenow(value);
-            checknow.then((res) => {
-            if(res) {
-                this.nav.push(HomePage);
-                window.localStorage.setItem('username', value.name);
-                window.localStorage.setItem('password', value.password); 
-                console.log('Valid user');
-            }
-            else {
-                console.log('Invalid user');
-            }
-            })    
+            this.authenticatenow(value)
+            .subscribe((data) => {
+                if(data.success) {
+                    window.localStorage.setItem('auth_key', data.token);
+                    console.log('true');}
+                    this.nav.push(HomePage);
+                    window.localStorage.setItem('username', value.username);
+                    window.localStorage.setItem('password', value.password); 
+                    console.log('Valid user');
+                    console.log('token : ' + window.localStorage.getItem('auth_key'));
+                    console.log('username : ' + window.localStorage.getItem('username'));
+                    console.log('password : ' + window.localStorage.getItem('password'));
+                },
+                error => {
+                    console.log('Invalid user/password');}
+                )
         }
-        else {
-                console.log('Invalid authForm');
-            }
     }
-    authenticatenow(value) {
 
+    authenticatenow(value) {
+        console.log('authenticatenow ' + value.username + ' ' + value.password);
         var headers = new Headers();
         let body = JSON.stringify({ name: value.username, password: value.password });
 
         headers.append('Content-Type', 'application/json');
-        return new Promise((resolve) => {
-        this.http.post('http://localhost:3333/authenticate', body, {headers: headers}).subscribe((data) => {
-            if(data.json().success) {
-                window.localStorage.setItem('auth_key', data.json().token);
-                this.isAuthenticated = true;}
-                resolve(this.isAuthenticated);
-            }
-        )
-        
-        })
+        return this.http.post('http://localhost:3333/authenticate', body, {headers: headers})
+        .map(Response => Response.json())
     } 
 
 }

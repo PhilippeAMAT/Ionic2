@@ -1,12 +1,13 @@
 import { Page, NavController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { FormBuilder,  ControlGroup, Validators, AbstractControl } from '@angular/common';
-import {Http, Headers} from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+import { Authentication } from '../../providers/authentication/authentication';
 
 @Page({
     templateUrl: 'build/pages/login/login.html',
+    providers: [Authentication]
 })
  
 export class LoginPage {
@@ -16,7 +17,7 @@ export class LoginPage {
     password: AbstractControl;
     fb: FormBuilder;
 
-    constructor(fb: FormBuilder, private nav: NavController, private http: Http) {
+    constructor(fb: FormBuilder, private nav: NavController, private authentication: Authentication) {
             this.fb = fb;
     }
  
@@ -33,7 +34,7 @@ export class LoginPage {
     onSubmit(value): void { 
 
         if(this.authForm.valid) {
-            this.authenticatenow(value)
+            this.authentication.authenticatenow(value)
             .subscribe((data) => {
                 if(data.success) {
                     window.localStorage.setItem('auth_key', data.token);
@@ -51,15 +52,4 @@ export class LoginPage {
                 )
         }
     }
-
-    authenticatenow(value) {
-        console.log('authenticatenow ' + value.username + ' ' + value.password);
-        var headers = new Headers();
-        let body = JSON.stringify({ name: value.username, password: value.password });
-
-        headers.append('Content-Type', 'application/json');
-        return this.http.post('http://localhost:3333/authenticate', body, {headers: headers})
-        .map(Response => Response.json())
-    } 
-
 }

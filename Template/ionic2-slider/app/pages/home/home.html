@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>   
+      <input type="number" placeholder="page number" #pageNumber>  
+      <button (click)="GoToPage(pageNumber.value)">go !</button>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-slides #mySlider [options]="mySlideOptions">
+  <ion-slide>
+    <img src="img/slide01.png"/>
+  </ion-slide>
+  <ion-slide>
+    <img src="img/slide02.png"/>
+  </ion-slide>
+  <ion-slide>
+    <img src="img/slide03.png"/>
+  </ion-slide>
+</ion-slides>
+
